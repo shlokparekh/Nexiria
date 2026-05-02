@@ -92,9 +92,24 @@
 
             <div class="simulation-view">
                 <div class="canvas-container" id="canvas-container">
-                    <canvas id="sim-canvas"></canvas>
-                    <div class="overlay-labels">
-                        <div class="label-box" id="label-tumor">Tumor Region</div>
+                    <!-- Macro View (Minimalist White Body) -->
+                    <div id="macro-view" class="active">
+                        <div class="body-wrapper">
+                            <img src="human_body_white.png" alt="Anatomical Model" class="human-model">
+                            <div class="tumor-marker-container">
+                                <div class="tumor-marker-macro"></div>
+                                <div class="tumor-glow-macro"></div>
+                            </div>
+                        </div>
+                        <div class="macro-label">Target Region: Thoracic Oncology</div>
+                    </div>
+
+                    <!-- Micro View (The Simulation) -->
+                    <div id="micro-view">
+                        <canvas id="sim-canvas"></canvas>
+                        <div class="overlay-labels">
+                            <div class="label-box" id="label-tumor">Tumor Region</div>
+                        </div>
                     </div>
                 </div>
             </div>

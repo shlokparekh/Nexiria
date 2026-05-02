@@ -308,6 +308,115 @@ canvas {
     height: 100%;
 }
 
+/* Macro/Micro View States */
+#macro-view, #micro-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#macro-view {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.5);
+    transform-origin: 50% 25%; /* Zoom into the chest of the white model */
+}
+
+#micro-view {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.5);
+}
+
+#macro-view.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+#micro-view.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+/* Transitions */
+.zooming-in #macro-view {
+    transform: scale(3);
+    opacity: 0;
+}
+
+.zooming-in #micro-view {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Macro View Specifics */
+.body-wrapper {
+    position: relative;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.human-model {
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+}
+
+.tumor-marker-container {
+    position: absolute;
+    top: 25%; /* Positioned over the chest area of the new white model */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.tumor-marker-macro {
+    width: 10px;
+    height: 10px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-red);
+}
+
+.tumor-glow-macro {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35px;
+    height: 35px;
+    background: radial-gradient(circle, var(--accent-red) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: tumor-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tumor-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.4); opacity: 0.2; }
+}
+
+.macro-label {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-family: var(--font-mono);
+}
+
 .overlay-labels {
     position: absolute;
     top: 0;
@@ -362,8 +471,24 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
+    background: 
+        radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.4) 100%),
+        url('https://www.transparenttextures.com/patterns/stardust.png'); /* Subtle grain */
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.3;
+}
+
+.canvas-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(to bottom, transparent 0%, rgba(0, 210, 255, 0.02) 50%, transparent 100%);
     pointer-events: none;
     animation: scanline 8s linear infinite;
+    z-index: 5;
 }
 
