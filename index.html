@@ -3,96 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexiria | Nanoparticle Drug Delivery Simulator</title>
-    <meta name="description" content="A scientific simulation of nanoparticle cancer drug delivery comparing random vs. guided strategies.">
+    <title>Nexiria | Research Terminal v2.0.0</title>
+    <meta name="description" content="Professional high-fidelity scientific simulation for nanoparticle oncology.">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="clinical-theme">
     <div class="app-container">
-        <header class="app-header">
-            <div class="logo">
-                <span class="logo-icon">⚛️</span>
-                <h1>Nexiria <span class="subtitle">BioSim v1.0</span></h1>
+        <header class="terminal-header">
+            <div class="header-left">
+                <span class="system-tag">SYSTEM: ACTIVE</span>
+                <span class="version-tag">VER: 2.0.0</span>
             </div>
-            <div class="status-bar">
-                <div class="status-item">
-                    <span class="label">System:</span>
-                    <span class="value" id="system-status">Idle</span>
-                </div>
-                <div class="status-item">
-                    <span class="label">Mode:</span>
-                    <span class="value" id="current-mode-display">Guided + Triggered</span>
-                </div>
+            <div class="header-center">
+                <h1>NEXIRIA <span class="protocol">BIOSIM PROTOCOL_117</span></h1>
+            </div>
+            <div class="header-right">
+                <span id="current-mode-display">STRATEGY: GUIDED + TRIGGERED</span>
+                <span id="system-clock">14:32:01</span>
             </div>
         </header>
 
-        <main class="dashboard">
-            <aside class="sidebar">
-                <section class="panel controls">
-                    <h2>Simulation Controls</h2>
-                    <div class="control-group">
-                        <button id="start-btn" class="btn primary">Start Simulation</button>
-                        <button id="reset-btn" class="btn secondary">Reset</button>
+        <main class="terminal-grid">
+            <!-- PANEL LEFT: PARAMETERS -->
+            <aside class="panel controls">
+                <div class="panel-header">SIMULATION PARAMETERS</div>
+                <div class="control-group">
+                    <button id="start-btn" class="btn primary">INITIALIZE SEQUENCE</button>
+                    <button id="reset-btn" class="btn secondary">SYSTEM RESET</button>
+                </div>
+                
+                <div class="control-divider"></div>
+                
+                <div class="control-group">
+                    <label>DELIVERY STRATEGY</label>
+                    <div class="segmented-control">
+                        <button type="button" id="mode-random" class="segment" onclick="window.sim.setMode('random')">RANDOM</button>
+                        <button type="button" id="mode-guided" class="segment active" onclick="window.sim.setMode('guided')">GUIDED</button>
                     </div>
-                    <div class="control-group">
-                        <label>Delivery Strategy</label>
-                        <div class="segmented-control">
-                            <button type="button" id="mode-random" class="segment" onclick="window.sim.setMode('random')">Random</button>
-                            <button type="button" id="mode-guided" class="segment active" onclick="window.sim.setMode('guided')">Guided</button>
-                        </div>
-                    </div>
-                </section>
+                </div>
 
-                <section class="panel metrics">
-                    <h2>Real-time Metrics</h2>
-                    <div class="metric-card">
-                        <span class="metric-label">Delivery Efficiency</span>
-                        <div class="metric-value-container">
-                            <span class="metric-value" id="efficiency">0.0%</span>
-                            <div class="progress-bar-bg">
-                                <div id="efficiency-bar" class="progress-bar" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Off-Target Exposure</span>
-                        <div class="metric-value-container">
-                            <span class="metric-value danger" id="off-target">0.0</span>
-                            <span class="metric-unit">Units</span>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Particles in Tumor</span>
-                        <div class="metric-value-container">
-                            <span class="metric-value" id="particles-count">0</span>
-                            <span class="metric-unit">/ 100</span>
-                        </div>
-                    </div>
-                </section>
+                <div class="control-group">
+                    <label>ZETA POTENTIAL (+22 mV)</label>
+                    <input type="range" min="0" max="100" value="70" class="slider">
+                </div>
+                
+                <div class="control-group">
+                    <label>LIGAND DENSITY (High)</label>
+                    <input type="range" min="0" max="100" value="85" class="slider">
+                </div>
 
-                <section class="panel legends">
-                    <h2>Visual Legend</h2>
-                    <div class="legend-item">
-                        <span class="dot tumor"></span>
-                        <span>Tumor Region</span>
+                <div class="panel-header metrics-title">LIVE METRICS</div>
+                <div class="metric-row">
+                    <div class="metric-box">
+                        <span class="m-label">EFFICIENCY</span>
+                        <span class="m-value" id="efficiency">0.0%</span>
                     </div>
-                    <div class="legend-item">
-                        <span class="dot particle"></span>
-                        <span>Nanoparticle</span>
+                    <div class="metric-box">
+                        <span class="m-label">EXPOSURE</span>
+                        <span class="m-value danger" id="off-target">0.0</span>
                     </div>
-                    <div class="legend-item">
-                        <span class="dot drug"></span>
-                        <span>Drug Payload</span>
-                    </div>
-                </section>
+                </div>
             </aside>
 
-            <div class="simulation-view">
+            <!-- PANEL CENTER: VIEWPORT -->
+            <section class="panel viewport">
+                <div class="viewport-header">MICROSCOPE VIEWPORT [X_99_Y_14]</div>
                 <div class="canvas-container" id="canvas-container">
-                    <!-- Macro View (Minimalist White Body) -->
                     <div id="macro-view" class="active">
                         <div class="body-wrapper">
                             <img src="human_body_white.png" alt="Anatomical Model" class="human-model">
@@ -101,18 +80,48 @@
                                 <div class="tumor-glow-macro"></div>
                             </div>
                         </div>
-                        <div class="macro-label">Target Region: Thoracic Oncology</div>
+                        <div class="macro-label">TARGET: THORACIC ONCOLOGY</div>
                     </div>
-
-                    <!-- Micro View (The Simulation) -->
                     <div id="micro-view">
+                        <div class="hud-overlay">
+                            <div class="grid-layer"></div>
+                            <div class="crosshair"></div>
+                        </div>
                         <canvas id="sim-canvas"></canvas>
                         <div class="overlay-labels">
-                            <div class="label-box" id="label-tumor">Tumor Region</div>
+                            <div class="label-box" id="label-tumor">TUMOR_ZONE_A</div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- PANEL RIGHT: ANALYTICS -->
+            <aside class="panel analytics">
+                <div class="panel-header">LIVE ANALYTICS</div>
+                <div class="chart-container">
+                    <span class="chart-label">NANOPARTICLE CONCENTRATION</span>
+                    <canvas id="chart-concentration"></canvas>
+                </div>
+                <div class="chart-container">
+                    <span class="chart-label">PH GRADIENT DISTRIBUTION</span>
+                    <canvas id="chart-ph"></canvas>
+                </div>
+                <div class="status-card">
+                    <span class="s-label">CELLULAR UPTAKE</span>
+                    <span class="s-value" id="particles-count">0 / 150</span>
+                    <div class="progress-bar-bg">
+                        <div id="efficiency-bar" class="progress-bar"></div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- PANEL BOTTOM: CONSOLE -->
+            <footer class="panel telemetry">
+                <div class="panel-header">SYSTEM TELEMETRY LOG</div>
+                <div id="console-log" class="console-output">
+                    <div class="log-entry">[14:32:01] System initialized. Standby for deployment.</div>
+                </div>
+            </footer>
         </main>
     </div>
 
