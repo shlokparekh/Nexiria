@@ -3,127 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexiria | Research Terminal v2.0.0</title>
-    <meta name="description" content="Professional high-fidelity scientific simulation for nanoparticle oncology.">
+    <title>Nexiria | Advanced Prototype v5.0</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body class="clinical-theme">
-    <div class="app-container">
-        <header class="terminal-header">
-            <div class="header-left">
-                <span class="system-tag">SYSTEM: ACTIVE</span>
-                <span class="version-tag">VER: 2.0.0</span>
-            </div>
-            <div class="header-center">
-                <h1>NEXIRIA <span class="protocol">BIOSIM PROTOCOL_117</span></h1>
-            </div>
-            <div class="header-right">
-                <span id="current-mode-display">STRATEGY: GUIDED + TRIGGERED</span>
-                <span id="system-clock">14:32:01</span>
-            </div>
-        </header>
+<body class="operating-mode">
+    <canvas id="nexiria-viewport"></canvas>
 
-        <main class="terminal-grid">
-            <!-- PANEL LEFT: PARAMETERS -->
-            <aside class="panel controls">
-                <div class="panel-header">SIMULATION PARAMETERS</div>
-                <div class="control-group">
-                    <button id="start-btn" class="btn primary">INITIALIZE SEQUENCE</button>
-                    <button id="reset-btn" class="btn secondary">SYSTEM RESET</button>
-                </div>
-                
-                <div class="control-divider"></div>
-                
-                <div class="control-group">
-                    <label>DELIVERY STRATEGY</label>
-                    <div class="segmented-control">
-                        <button type="button" id="mode-random" class="segment" onclick="window.sim.setMode('random')">RANDOM</button>
-                        <button type="button" id="mode-guided" class="segment active" onclick="window.sim.setMode('guided')">GUIDED</button>
-                    </div>
-                </div>
+    <div id="clinical-hud">
+        <div class="hud-top-left">
+            <div class="system-id">NEXIRIA_OPERATING_SYSTEM_v5.0.2</div>
+            <div class="status-indicator"><span class="pulse-dot"></span> SYSTEM_LIVE: MONITORING_MODE</div>
+        </div>
 
-                <div class="control-group">
-                    <label>ZETA POTENTIAL (+22 mV)</label>
-                    <input type="range" min="0" max="100" value="70" class="slider">
-                </div>
-                
-                <div class="control-group">
-                    <label>LIGAND DENSITY (High)</label>
-                    <input type="range" min="0" max="100" value="85" class="slider">
-                </div>
+        <div class="hud-top-right">
+            <div class="clock-feed" id="hud-clock">00:00:00</div>
+            <div class="mode-indicator" id="val-mode">STRATEGY: INTELLIGENT_NEXIRIA</div>
+        </div>
 
-                <div class="panel-header metrics-title">LIVE METRICS</div>
-                <div class="metric-row">
-                    <div class="metric-box">
-                        <span class="m-label">EFFICIENCY</span>
-                        <span class="m-value" id="efficiency">0.0%</span>
-                    </div>
-                    <div class="metric-box">
-                        <span class="m-label">EXPOSURE</span>
-                        <span class="m-value danger" id="off-target">0.0</span>
-                    </div>
-                </div>
-            </aside>
+        <!-- TELEMETRY FEED -->
+        <div class="hud-bottom-left">
+            <div class="metric-row"><span class="m-label">DORMANT_NODES</span><span class="m-value" id="val-dormant">0</span></div>
+            <div class="metric-row"><span class="m-label">VERIFYING</span><span class="m-value" id="val-verifying" style="color: #ffff64">0</span></div>
+            <div class="metric-row"><span class="m-label">INTERVENING</span><span class="m-value" id="val-active" style="color: #00ff88">0</span></div>
+            <div class="metric-row"><span class="m-label">BIODEGRADED</span><span class="m-value" id="val-degraded">0</span></div>
+        </div>
 
-            <!-- PANEL CENTER: VIEWPORT -->
-            <section class="panel viewport">
-                <div class="viewport-header">MICROSCOPE VIEWPORT [X_99_Y_14]</div>
-                <div class="canvas-container" id="canvas-container">
-                    <div id="macro-view" class="active">
-                        <div class="body-wrapper">
-                            <img src="human_body_white.png" alt="Anatomical Model" class="human-model">
-                            <div class="tumor-marker-container">
-                                <div class="tumor-marker-macro"></div>
-                                <div class="tumor-glow-macro"></div>
-                            </div>
-                        </div>
-                        <div class="macro-label">TARGET: THORACIC ONCOLOGY</div>
-                    </div>
-                    <div id="micro-view">
-                        <div class="hud-overlay">
-                            <div class="grid-layer"></div>
-                            <div class="crosshair"></div>
-                        </div>
-                        <canvas id="sim-canvas"></canvas>
-                        <div class="overlay-labels">
-                            <div class="label-box" id="label-tumor">TUMOR_ZONE_A</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- PANEL RIGHT: ANALYTICS -->
-            <aside class="panel analytics">
-                <div class="panel-header">LIVE ANALYTICS</div>
-                <div class="chart-container">
-                    <span class="chart-label">NANOPARTICLE CONCENTRATION</span>
-                    <canvas id="chart-concentration"></canvas>
-                </div>
-                <div class="chart-container">
-                    <span class="chart-label">PH GRADIENT DISTRIBUTION</span>
-                    <canvas id="chart-ph"></canvas>
-                </div>
-                <div class="status-card">
-                    <span class="s-label">CELLULAR UPTAKE</span>
-                    <span class="s-value" id="particles-count">0 / 150</span>
-                    <div class="progress-bar-bg">
-                        <div id="efficiency-bar" class="progress-bar"></div>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- PANEL BOTTOM: CONSOLE -->
-            <footer class="panel telemetry">
-                <div class="panel-header">SYSTEM TELEMETRY LOG</div>
-                <div id="console-log" class="console-output">
-                    <div class="log-entry">[14:32:01] System initialized. Standby for deployment.</div>
-                </div>
-            </footer>
-        </main>
+        <div class="hud-bottom-right">
+            <div class="metric-row"><span class="m-label">SYNC_STABILITY</span><span class="m-value" id="val-sync">0.0%</span></div>
+            <div class="metric-row"><span class="m-label">CONFIDENCE_AVG</span><span class="m-value" id="val-confidence">0.0%</span></div>
+            <div class="metric-row"><span class="m-label">OFF_TARGET_EXP</span><span class="m-value safe" id="val-exposure">0.00%</span></div>
+        </div>
     </div>
+
+    <!-- INSPECTION PANEL -->
+    <div id="inspection-panel" class="side-panel">
+        <div class="panel-header">CELL_INSPECTION_DATA</div>
+        <div class="panel-content" id="inspection-data">
+            <p class="text-dim">Select a cellular entity to begin analysis...</p>
+        </div>
+        <button class="close-panel" id="close-inspection">CLOSE_DATA_FEED</button>
+    </div>
+
+    <!-- MANUAL CONTROL DECK -->
+    <div id="control-deck">
+        <div class="control-group">
+            <button id="btn-spawn">SPAWN_ANOMALY</button>
+            <button id="btn-inject">INJECT_NODES</button>
+            <button id="btn-mode">TOGGLE_PASSIVE</button>
+        </div>
+        <div class="control-group">
+            <div class="slider-box">
+                <label>HYPOXIA_SIG</label>
+                <input type="range" id="slider-hypoxia" min="0" max="100" value="70">
+            </div>
+            <div class="slider-box">
+                <label>ENZYME_LVL</label>
+                <input type="range" id="slider-enzyme" min="0" max="100" value="85">
+            </div>
+            <button id="btn-focus" class="active">AUTO_FOCUS: ON</button>
+        </div>
+    </div>
+
+    <!-- OVERLAYS -->
+    <div id="focus-overlay" class="focus-vignette"></div>
+    <div class="overlay-vignette"></div>
+    <div class="overlay-grain"></div>
 
     <script src="simulation.js"></script>
 </body>
